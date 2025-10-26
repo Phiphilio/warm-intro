@@ -54,3 +54,25 @@ If accepted, the bot creates a private DM or temporary channel:
 - Discord.js v14
 
 - Node.js
+
+## structure of the project
+
+```
+discord-bot/
+│
+├── src/                   # Tout le code TypeScript source
+│   ├── commands/          # Dossier pour toutes les commandes
+│   │   └── utility/       # Sous-dossier pour commandes utilitaires
+│   │       └── ping.ts    # Exemple de commande
+│   │
+│   ├── deploy-commands.ts # Script pour enregistrer les slash commands
+│   └── index.ts           # Point d’entrée du bot
+│
+├── dist/                  # Fichiers compilés JS (générés automatiquement par tsc)
+│
+├── .env                   # Token, clientId, guildId, etc.
+├── package.json
+├── package-lock.json
+└── tsconfig.json
+
+```

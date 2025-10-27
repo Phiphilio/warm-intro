@@ -1,4 +1,5 @@
-import { Client, Events, GatewayIntentBits } from "discord.js";
+const { Client, Events, GatewayIntentBits } = require("discord.js");
+require("dotenv").config();
 
 //Client : classe principale pour créer mon bot discord
 //Events contient tous les évènements que le bot peut écouter
@@ -9,4 +10,12 @@ import { Client, Events, GatewayIntentBits } from "discord.js";
 // en parallèle, un Events, c'est directement l'action que j'effectue avec ce sens. "je regarde la télé", "j'écoute l'album de prince",
 //  "je touche mes cheveux "
 
+const Token = process.env.DISCORD_TOKEN;
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+client.once(Events.ClientReady, (readyClient: typeof Client) => {
+  console.log(`Ready client for ${readyClient.user.tag}`);
+});
+
+client.login(Token);

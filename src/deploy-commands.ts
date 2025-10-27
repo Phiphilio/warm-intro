@@ -1,12 +1,16 @@
 const { REST, Routes } = require("discord.js");
-const { clientId, guildId, token } = require("./config.json");
+require("dotenv").config();
+import * as fs from "fs";
+import * as path from "path";
 
-/**
- * const fs, const commands, const foldersPath, const commandFolders sont déjà déclaré dans le fichier index.ts
- * c'est probablement dû à la méhtode d'import, il faut absolument que je creuse ça
- */
+const Client_ID = process.env.Client_ID;
+const GUILD_ID = process.env.GUILD_ID;
+const Token = process.env.DISCORD_TOKEN;
 
 const commands = [];
+
+const foldersPath = path.join(__dirname, "commands");
+const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
   // Grab all the command files from the commands directory you created earlier
@@ -29,7 +33,7 @@ for (const folder of commandFolders) {
 }
 
 // Construire et préparer une instance du module REST
-const rest = new REST().setToken(token);
+const rest = new REST().setToken(Token);
 // et déployez vos commandes !
 (async () => {
   try {
@@ -38,7 +42,7 @@ const rest = new REST().setToken(token);
     );
     // La méthode put est utilisée pour actualiser complètement toutes les commandes de la guilde avec le jeu actuel.
     const data = await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId),
+      Routes.applicationGuildCommands(Client_ID, GUILD_ID),
       { body: commands }
     );
     console.log(

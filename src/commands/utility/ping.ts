@@ -3,9 +3,9 @@ const { SlashCommandBuilder, ApplicationCommand } = require("discord.js");
 // son nom, sa description, ses options etc
 
 module.exports = {
-  data: new SlashCommandBuilder.setName("ping").setDescription(
-    "Replies with Pong!"
-  ),
+  data: new SlashCommandBuilder()
+    .setName("ping")
+    .setDescription("Replies with Pong!"),
 
   // execute est la fonction asychrone qui servira de handler. Quand l'utilisateur tapera "/ping"
   // c'est execute qui sera appelée

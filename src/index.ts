@@ -52,6 +52,18 @@ for (const folder of commandFolders) {
   const commandFiles = fs
     .readdirSync(commandsPath)
     .filter((file: string) => file.endsWith(".js"));
-  console.log("commandFiles :", commandFiles);
+  for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file);
+    const command = require(filePath); // récupère l'objet exporté dans le fichier décrivant la commande
+    //vérification de si l'object récupérée dans le fichier décrivant la commande contient bien les propriétés data et execute
+    // si c'est le cas, on les ajoute dans la map étendue contenue dans client.commands
+    if ("data" in command && "execute" in command) {
+      client.commands.set(command.data.name, command);
+    } else {
+      console.log(
+        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+      );
+    }
+  }
 }
 client.login(Token);

@@ -1,4 +1,12 @@
-const { Client, Events, GatewayIntentBits } = require("discord.js");
+const fs = require("node:fs");
+const path = require("node:path");
+const {
+  Client,
+  Collection,
+  Events,
+  GatewayIntentBits,
+  MessageFlags,
+} = require("discord.js");
 require("dotenv").config();
 
 //Client : classe principale pour créer mon bot discord
@@ -18,4 +26,32 @@ client.once(Events.ClientReady, (readyClient: typeof Client) => {
   console.log(`Ready client for ${readyClient.user.tag}`);
 });
 
+//client.commands = new Collection() → crée un coffre pour toutes les commandes du bot.
+/**
+ * Collection est une classe étendue de Map proposée par discord.js.
+ * Une Map est une structure de données clé‑valeur (comme un objet), mais avec quelques avantages :
+ *          Les clés peuvent être de n’importe quel type (pas seulement des chaînes)
+ *          La taille est directement accessible via .size
+ *          On peut itérer facilement sur les entrées avec for…of
+ *          Méthodes utiles : .set(key, value), .get(key), .has(key), .delete(key), etc.
+ *
+ */
+client.commands = new Collection();
+
+// path.join aide a construire un chemin vers le repertoire portant le nom du deuxième paramètre
+const foldersPath = path.join(__dirname, "commands");
+
+// fs.readdirSync La méthode lit le chemin d'accès au répertoire et renvoie un tableau contenant
+// tous les noms de dossiers/ fichiers qu'il contient.
+const commandFolders = fs.readdirSync(foldersPath);
+
+// création d'une boucle
+
+for (const folder of commandFolders) {
+  const commandsPath = path.join(foldersPath, folder);
+  const commandFiles = fs
+    .readdirSync(commandsPath)
+    .filter((file: string) => file.endsWith(".js"));
+  console.log("commandFiles :", commandFiles);
+}
 client.login(Token);

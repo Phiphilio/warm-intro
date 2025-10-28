@@ -6,6 +6,7 @@ const {
   Events,
   GatewayIntentBits,
   MessageFlags,
+  ChatInputCommandInteraction,
 } = require("discord.js");
 require("dotenv").config();
 
@@ -38,13 +39,18 @@ client.once(Events.ClientReady, (readyClient: typeof Client) => {
  */
 client.commands = new Collection();
 
-// path.join aide a construire un chemin vers le repertoire portant le nom du deuxième paramètre
+//path.join fait parti du package node.js
+// path.join aide a construire un chemin grace aux fichiers/dossiers que je lui rentre en paramètre
+// je peux lui rentrer autant de paramètre que je veux, du moment que chaque représente un dossier, un sous dossier ou un fichier
+
+//__dirname est une variable spéciale de node.js qui permet d'avoir le chemin absolu vers le fichier où je me situe
+// ça par de la racine du système de fichier pour arriver jusqu'au répertoire où se situe mon fichier
 const foldersPath = path.join(__dirname, "commands");
 
 // fs.readdirSync La méthode lit le chemin d'accès au répertoire et renvoie un tableau contenant
 // tous les noms de dossiers/ fichiers qu'il contient.
 const commandFolders = fs.readdirSync(foldersPath);
-
+console.log(" les folder que contient commandFolders :", commandFolders);
 // création d'une boucle
 
 for (const folder of commandFolders) {
@@ -69,8 +75,9 @@ for (const folder of commandFolders) {
 
 client.on(
   Events.InteractionCreate,
-  async (interaction: typeof ApplicationCommand) => {
+  async (interaction: typeof ChatInputCommandInteraction) => {
     if (!interaction.isChatInputCommand()) return;
+    //récupération du nom de la commande
     const command = interaction.client.commands.get(interaction.commandName);
 
     if (!command) {

@@ -8,6 +8,7 @@ const {
   MessageFlags,
   ChatInputCommandInteraction,
 } = require("discord.js");
+
 require("dotenv").config();
 
 //Client : classe principale pour créer mon bot discord
@@ -50,9 +51,8 @@ const foldersPath = path.join(__dirname, "commands");
 // fs.readdirSync La méthode lit le chemin d'accès au répertoire et renvoie un tableau contenant
 // tous les noms de dossiers/ fichiers qu'il contient.
 const commandFolders = fs.readdirSync(foldersPath);
-console.log(" les folder que contient commandFolders :", commandFolders);
-// création d'une boucle
 
+// création d'une boucle pour parcourir le système de fichier
 for (const folder of commandFolders) {
   const commandsPath = path.join(foldersPath, folder);
   const commandFiles = fs
@@ -73,36 +73,37 @@ for (const folder of commandFolders) {
   }
 }
 
-client.on(
-  Events.InteractionCreate,
-  async (interaction: typeof ChatInputCommandInteraction) => {
-    if (!interaction.isChatInputCommand()) return;
-    //récupération du nom de la commande
-    const command = interaction.client.commands.get(interaction.commandName);
+client.on(Events.InteractionCreate, async (interaction: any) => {
+  console.log(
+    " ce que contient interaction.client.commands :",
+    interaction.client.commands
+  );
+  // vérifie que interaction est une commande slash et ça renvoie rien si s'en est pas une
+  if (!interaction.isChatInputCommand()) return;
 
-    if (!command) {
-      console.error(
-        `No command matching ${interaction.commandName} was found.`
-      );
-      return;
-    }
+  //récupération du nom de la commande
+  const command = interaction.client.commands.get(interaction.commandName);
 
-    try {
-      await command.execute(interaction);
-    } catch (error) {
-      console.error(error);
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({
-          content: "There was an error while executing this command!",
-          flags: MessageFlags.Ephemeral,
-        });
-      } else {
-        await interaction.reply({
-          content: "There was an error while executing this command!",
-          flags: MessageFlags.Ephemeral,
-        });
-      }
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp({
+        content: "There was an error while executing this command!",
+        flags: MessageFlags.Ephemeral,
+      });
+    } else {
+      await interaction.reply({
+        content: "There was an error while executing this command!",
+        flags: MessageFlags.Ephemeral,
+      });
     }
   }
-);
+});
 client.login(Token);

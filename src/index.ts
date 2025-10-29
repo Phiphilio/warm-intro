@@ -24,10 +24,6 @@ const Token = process.env.DISCORD_TOKEN;
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-client.once(Events.ClientReady, (readyClient: typeof Client) => {
-  console.log(`Ready client for ${readyClient.user.tag}`);
-});
-
 //client.commands = new Collection() → crée un coffre pour toutes les commandes du bot.
 /**
  * Collection est une classe étendue de Map proposée par discord.js.
@@ -102,4 +98,21 @@ client.on(Events.InteractionCreate, async (interaction: any) => {
     }
   }
 });
+
+// logique d'appel des handler
+const eventsPath = path.join(__dirname, "events");
+const eventFiles = fs
+  .readdirSync(eventsPath)
+  .filter((file: string) => file.endsWith("js"));
+
+for (const file of eventFiles) {
+  const filePath = path.join(eventsPath, file);
+  const event = require(filePath);
+  if (event.once) {
+    client.once(event.name, (...args: any) => event.execute(...args));
+  } else {
+    client.on(event.name, (...args: any) => event.execute(...args));
+  }
+}
+
 client.login(Token);

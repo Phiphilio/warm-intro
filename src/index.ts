@@ -74,10 +74,6 @@ for (const folder of commandFolders) {
 }
 
 client.on(Events.InteractionCreate, async (interaction: any) => {
-  console.log(
-    " ce que contient interaction.client.commands :",
-    interaction.client.commands
-  );
   // vérifie que interaction est une commande slash et ça renvoie rien si s'en est pas une
   if (!interaction.isChatInputCommand()) return;
 

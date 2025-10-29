@@ -1,4 +1,4 @@
-import { Events, MessageFlags } from "discord.js";
+import { Events, MessageFlags, Collection } from "discord.js";
 
 //création d'un handler pour gérer les différentes intéractions du bot
 module.exports = {
@@ -21,6 +21,7 @@ module.exports = {
 
     //récupération du cooldow depuis le client discord
     const { cooldowns } = interaction.client;
+    console.log("cooldown :", cooldowns);
     /**
      * pour rappel voici à quoi ressemble
      * cooldowns = {

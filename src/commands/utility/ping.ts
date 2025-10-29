@@ -3,6 +3,7 @@ const { SlashCommandBuilder, ApplicationCommand } = require("discord.js");
 // son nom, sa description, ses options etc
 
 module.exports = {
+  cooldown: 5,
   data: new SlashCommandBuilder()
     .setName("ping")
     .setDescription("Replies with Pong!"),

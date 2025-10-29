@@ -36,6 +36,9 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
  */
 client.commands = new Collection();
 
+// je crée une map pour stocker les données de mon cooldown
+client.cooldown = new Collection();
+
 //path.join fait parti du package node.js
 // path.join aide a construire un chemin grace aux fichiers/dossiers que je lui rentre en paramètre
 // je peux lui rentrer autant de paramètre que je veux, du moment que chaque représente un dossier, un sous dossier ou un fichier

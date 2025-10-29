@@ -69,36 +69,6 @@ for (const folder of commandFolders) {
   }
 }
 
-client.on(Events.InteractionCreate, async (interaction: any) => {
-  // vérifie que interaction est une commande slash et ça renvoie rien si s'en est pas une
-  if (!interaction.isChatInputCommand()) return;
-
-  //récupération du nom de la commande
-  const command = interaction.client.commands.get(interaction.commandName);
-
-  if (!command) {
-    console.error(`No command matching ${interaction.commandName} was found.`);
-    return;
-  }
-
-  try {
-    await command.execute(interaction);
-  } catch (error) {
-    console.error(error);
-    if (interaction.replied || interaction.deferred) {
-      await interaction.followUp({
-        content: "There was an error while executing this command!",
-        flags: MessageFlags.Ephemeral,
-      });
-    } else {
-      await interaction.reply({
-        content: "There was an error while executing this command!",
-        flags: MessageFlags.Ephemeral,
-      });
-    }
-  }
-});
-
 // logique d'appel des handler
 const eventsPath = path.join(__dirname, "events");
 const eventFiles = fs
